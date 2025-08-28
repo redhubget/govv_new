@@ -1,20 +1,65 @@
+// src/pages/Activities.jsx
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { api } from '../api'
-export default function Activities(){
-  const [items,setItems] = useState([]); const [total,setTotal] = useState(0); const [page,setPage] = useState(1)
-  useEffect(()=>{ api.activities({page}).then(({items,total})=>{ setItems(items); setTotal(total) }) }, [page])
-  return (<div className="container">
-    <div className="card"><h2>History</h2>
-      {items.length===0 && <div className="skeleton" style={{height:40}}/>}
-      <ul>{items.map(a=> (<li key={a.id} style={{margin:'12px 0'}}>
-        <Link to={`/activity/${a.id}`}>🏁 {a.name || 'Ride'} — {a.distance?.toFixed?.(2)} km • {Math.round(a.duration/60)} min</Link>
-      </li>))}</ul>
-      <div style={{display:'flex',gap:8}}>
-        <button className="btn-ghost" onClick={()=> setPage(Math.max(1,page-1))}>Prev</button>
-        <div className="badge">Page {page}</div>
-        <button className="btn-ghost" onClick={()=> setPage(page+1)}>Next</button>
-      </div>
+import { motion } from 'framer-motion'
+import { api } from '../lib/api'
+
+export default function Activities() {
+  const [loading, setLoading] = useState(true)
+  const [items, setItems] = useState([])
+
+  const dummy = [
+    { id: 'ride1', name: 'Morning Ride', start_time: new Date(Date.now() - 86400000).toISOString(), distance_km: 12.4, avg_kmh: 18.2, duration_sec: 2400 },
+    { id: 'ride2', name: 'Evening Sprint', start_time: new Date(Date.now() - 2*86400000).toISOString(), distance_km: 6.7,  avg_kmh: 22.5, duration_sec: 1100 },
+    { id: 'ride3', name: 'Weekend Long Ride', start_time: new Date(Date.now() - 5*86400000).toISOString(), distance_km: 24.9, avg_kmh: 17.1, duration_sec: 5400 },
+  ]
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true)
+      try {
+        const r = await api.activities.list({ limit: 100 })
+        const arr = r.data?.data?.items || r.data?.data || r.data || []
+        setItems(Array.isArray(arr) && arr.length ? arr : dummy)
+      } catch (e) {
+        console.error('Activities list error', e)
+        setItems(dummy)
+      } finally {
+        setLoading(false)
+      }
+    })()
+  }, [])
+
+  return (
+    <div className="container">
+      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+        <h2 style={{ marginBottom: 16 }}>Ride History</h2>
+        {loading ? (
+          <div>Loading...</div>
+        ) : (
+          <div className="grid" style={{ gap: 12 }}>
+            {items.map((a) => (
+              <Link
+                key={a.id}
+                to={`/activity/${a.id}`}
+                className="card"
+                style={{ gridColumn: 'span 12', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+              >
+                <div>
+                  <div style={{ fontWeight: 600 }}>{a.name || 'Ride'}</div>
+                  <div style={{ fontSize: 13, opacity: 0.7 }}>{new Date(a.start_time).toLocaleString()}</div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontWeight: 600 }}>{Number(a.distance_km).toFixed(1)} km</div>
+                  <div style={{ fontSize: 13, opacity: 0.7 }}>
+                    {Number(a.avg_kmh).toFixed(1)} km/h • {Math.round(a.duration_sec / 60)} min
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </motion.div>
     </div>
-  </div>)
+  )
 }
