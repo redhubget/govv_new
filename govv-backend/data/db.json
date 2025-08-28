@@ -1,0 +1,48 @@
+{
+  "users": [
+    {
+      "id": "u1",
+      "name": "Test User",
+      "email": "test@example.com",
+      "settings": {
+        "theme": "dark"
+      }
+    }
+  ],
+  "activities": [
+    {
+      "id": "a1",
+      "name": "Morning Ride",
+      "distance_km": 12.3,
+      "duration_sec": 1800,
+      "avg_kmh": 24.6,
+      "start_time": "2025-08-28T07:00:00Z",
+      "points_earned": 12
+    }
+  ],
+  "bikes": [
+    {
+      "id": "b1",
+      "serial": "ABC123",
+      "locked": true
+    }
+  ],
+  "warranty": [
+    {
+      "serial": "ABC123",
+      "purchase_date": "2024-01-01",
+      "valid_until": "2026-01-01",
+      "status": "active",
+      "claims": []
+    }
+  ],
+  "serviceCenters": [
+    {
+      "id": "s1",
+      "name": "Go VV Service Bangalore",
+      "city": "Bengaluru",
+      "address": "Koramangala"
+    }
+  ],
+  "telemetry": []
+}
