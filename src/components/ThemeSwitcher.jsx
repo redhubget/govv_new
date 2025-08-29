@@ -1,30 +1,35 @@
-// src/components/ThemeSwitcher.jsx
-import { useEffect, useState } from 'react'
-import { getTheme, setTheme } from '../lib/theme'
+import { useEffect, useState, createContext, useContext } from 'react';
 
-export function ThemeSwitcher() {
-  const [theme, setLocal] = useState(getTheme()) // 'light' | 'dark' | 'system'
+const ThemeCtx = createContext({ theme: 'light', setTheme: () => {} });
+
+export function ThemeProvider({ children }) {
+  const [theme, setTheme] = useState(() => {
+    // default to light if nothing stored
+    return localStorage.getItem('govv_theme') || 'light';
+  });
 
   useEffect(() => {
-    // ensure UI is in sync if changed elsewhere
-    const t = getTheme()
-    if (t !== theme) setLocal(t)
-  }, [])
+    localStorage.setItem('govv_theme', theme);
+    document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+    // (optional) change PWA theme color
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#0a0a0a' : '#ffffff');
+  }, [theme]);
 
-  const onChange = (e) => {
-    const v = e.target.value
-    setLocal(v)
-    setTheme(v) // persist + apply immediately
-  }
-
-  return (
-    <label style={{ display: 'grid', gap: 6 }}>
-      <span className="badge" style={{ width: 'fit-content' }}>Theme</span>
-      <select value={theme} onChange={onChange} className="btn-ghost" style={{ padding: 10, borderRadius: 10 }}>
-        <option value="system">System</option>
-        <option value="dark">Dark</option>
-        <option value="light">Light</option>
-      </select>
-    </label>
-  )
+  return <ThemeCtx.Provider value={{ theme, setTheme }}>{children}</ThemeCtx.Provider>;
 }
+
+export function useTheme() {
+  return useContext(ThemeCtx);
+}
+
+export function ThemeSwitcher() {
+  const { theme, setTheme } = useTheme();
+  const next = theme === 'dark' ? 'light' : 'dark';
+  return (
+    <button className="btn-outline" onClick={() => setTheme(next)}>
+      {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
+    </button>
+  );
+}
+
