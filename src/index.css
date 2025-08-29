@@ -9,7 +9,7 @@
   --card: #ffffff;
   --text: #0b0f14;
   --muted: #5b6b7a;
-  --accent: #0f7a33;           /* GOVV green */
+  --accent: #0f7a33;    /* GOVV green */
   --border: #e5e7eb;
 }
 
@@ -18,7 +18,7 @@
   --card: #0e141d;
   --text: #e9eef5;
   --muted: #98a6b5;
-  --accent: #1db954;           /* green that reads well on dark */
+  --accent: #1db954;    /* green for dark */
   --border: #1f2937;
 }
 
@@ -35,7 +35,7 @@ body {
     Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
-/* ---------- Utilities used in the app ---------- */
+/* ---------- Utilities ---------- */
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -59,6 +59,11 @@ body {
   opacity: 0;
   transform: translateY(8px);
   animation: fadeIn .7s ease forwards;
+}
+
+/* Fade-in for cards */
+@keyframes fadeIn {
+  to { opacity: 1; transform: none; }
 }
 
 button {
@@ -97,6 +102,7 @@ button:active { transform: scale(.98); }
 }
 
 .nav { position: sticky; top: 0; z-index: 10; }
+
 .bottom-nav {
   position: fixed; left: 0; right: 0; bottom: 0;
   background: color-mix(in srgb, var(--bg) 70%, #00000020);
@@ -128,12 +134,7 @@ button:active { transform: scale(.98); }
 }
 @keyframes sk { from { background-position: -100px } to { background-position: 100px } }
 
-/* Fade-in for cards */
-@keyframes fadeIn {
-  to { opacity: 1; transform: none; }
-}
-
-/* Splash / Loading screen (used by Splash.jsx) */
+/* ✅ Splash / Loading screen */
 .splash-wrap {
   height: 100dvh;
   display: grid;
@@ -145,4 +146,57 @@ button:active { transform: scale(.98); }
   object-fit: contain;
   filter: drop-shadow(0 8px 20px rgba(0,0,0,.08));
 }
+
+/* ---- Auth inputs: white in light + dark variant ---- */
+.input,
+input[type="text"],
+input[type="tel"],
+input[type="password"],
+input[type="number"],
+textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+
+  /* Light mode */
+  background: #ffffff;
+  color: #0b0f14;
+  border: 1px solid #d1d5db;
+
+  outline: none;
+  caret-color: var(--accent);
+  transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+}
+
+:root[data-theme="dark"] .input,
+:root[data-theme="dark"] input[type="text"],
+:root[data-theme="dark"] input[type="tel"],
+:root[data-theme="dark"] input[type="password"],
+:root[data-theme="dark"] input[type="number"],
+:root[data-theme="dark"] textarea {
+  background: #0e141d;
+  color: #e9eef5;
+  border-color: #243042;
+}
+
+.input::placeholder,
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.85;
+}
+
+.input:focus,
+input:focus,
+textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+/* Autofill fix */
+input:-webkit-autofill {
+  -webkit-text-fill-color: inherit !important;
+  transition: background-color 99999s ease-in-out 0s;
+}
+
 
