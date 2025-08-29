@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { api } from '../api'
 import { useAppStore } from '../store'
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function Login() {
   const setAuth = useAppStore(s => s.setAuth)
@@ -8,6 +9,10 @@ export default function Login() {
   const [otp, setOtp] = useState('')
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/home'; // fallback: go to Home
 
   const send = async () => {
     setLoading(true)
@@ -24,6 +29,7 @@ export default function Login() {
     try {
       const { token, user } = await api.verifyOTP({ phone, otp })
       setAuth(user, token)
+      navigate(from, { replace: true }) // ⬅️ go to previous page or /home
     } finally {
       setLoading(false)
     }
