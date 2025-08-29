@@ -196,30 +196,39 @@ main,
   padding-bottom: 84px;
 }
 
-/* ✅ Input styling (fix invisible phone/OTP text) */
-.input {
+/* ---- Input visibility + focus styles (works in light & dark) ---- */
+.input,
+input[type="text"],
+input[type="tel"],
+input[type="password"],
+input[type="number"],
+textarea {
   width: 100%;
   padding: 12px 14px;
   border-radius: 12px;
-  background: var(--card);
-  color: var(--text);
-  border: 1px solid color-mix(in srgb, var(--text) 14%, transparent);
+  background: var(--card);                    /* contrast against card */
+  color: var(--text);                         /* make text visible */
+  border: 1px solid color-mix(in srgb, var(--accent) 12%, #00000020);
   outline: none;
-  transition: border-color .15s ease, box-shadow .15s ease;
+  caret-color: var(--accent);
 }
 
-.input::placeholder {
+.input::placeholder,
+input::placeholder,
+textarea::placeholder {
   color: var(--muted);
   opacity: 0.85;
 }
 
-.input:focus {
+.input:focus,
+input:focus,
+textarea:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
 }
 
+/* Autofill (Chrome/Safari) keeps text visible */
 input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 30px var(--card) inset !important;
   -webkit-text-fill-color: var(--text) !important;
+  transition: background-color 99999s ease-in-out 0s;
 }
-
