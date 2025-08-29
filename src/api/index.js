@@ -1,33 +1,42 @@
 // src/api/index.js
-const API =
-  (import.meta.env.VITE_API_URL && import.meta.env.VITE_API_URL.replace(/\/$/, "")) ||
-  "https://govv-new.onrender.com/api"; // hard fallback so prod never hits relative /api
+const RAW = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+// default fallbacks so prod never hits relative /api
+const API = RAW || "https://govv-new.onrender.com/api";
 
-// small helper
 async function request(path, options = {}) {
-  const res = await fetch(`${API}${path}`, {
+  const url = `${API}${path.startsWith("/") ? path : `/${path}`}`;
+  const res = await fetch(url, {
+    method: "GET",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
     ...options,
   });
-  if (!res.ok) throw new Error(await res.text());
-  return res.json();
+  const text = await res.text();
+  let data;
+  try { data = text ? JSON.parse(text) : {}; } catch { data = { raw: text }; }
+
+  if (!res.ok) {
+    // Surface the exact URL/status/response so we can see 404 details in console
+    const err = new Error(`HTTP ${res.status} ${res.statusText} at ${url}`);
+    err.status = res.status;
+    err.response = data;
+    console.error("[API ERROR]", err);
+    throw err;
+  }
+  return data;
 }
 
 export const api = {
-  sendOTP: (data) => request("/auth/send-otp", { method: "POST", body: JSON.stringify(data) }),
-  verifyOTP: (data) => request("/auth/verify-otp", { method: "POST", body: JSON.stringify(data) }),
+  // Auth
+  sendOTP: (payload) =>
+    request("/auth/send-otp", { method: "POST", body: JSON.stringify(payload) }),
+  verifyOTP: (payload) =>
+    request("/auth/verify-otp", { method: "POST", body: JSON.stringify(payload) }),
 
-  getActivities: (userId) => request(`/activities/${userId}`),
-  getActivity: (id) => request(`/activities/${id}`),
-
-  linkBike: (data) => request("/bikes/link", { method: "POST", body: JSON.stringify(data) }),
-  getBike: (id) => request(`/bikes/${id}`),
-  toggleLock: (id) => request(`/bikes/${id}/lock`, { method: "POST", body: "{}" }),
-
-  getWarranty: (serial) => request(`/warranty/${serial}`),
-  claimWarranty: (data) => request("/warranty/claim", { method: "POST", body: JSON.stringify(data) }),
-
-  sendContact: (data) => request("/contact/send", { method: "POST", body: JSON.stringify(data) }),
+  // sanity ping (useful to confirm base URL)
+  health: () => request("/health"),
 };
+
+// For quick sanity checks in the browser console
+console.log("[API BASE]", API);
 
