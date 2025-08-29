@@ -1,38 +1,54 @@
-import { BrowserRouter, Routes, Route, NavLink, useLocation, Navigate } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
-import { useState } from 'react'
+import { BrowserRouter, Routes, Route, NavLink, useLocation, Navigate } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
-import './index.css'
-import './app.css'
+import './index.css';
 
-// Pages
-import Home from './pages/Home'
-import Track from './pages/Track'
-import Profile from './pages/Profile'
-import Login from './pages/Login'
-import Dashboard from './pages/Dashboard'
-import Activities from './pages/Activities'
-import ActivityDetail from './pages/ActivityDetail'
-import Shop from './pages/Shop'
-import Warranty from './pages/Warranty'
-import Contact from './pages/Contact'
-import ServiceCenters from './pages/ServiceCenters'
-import BikeDetail from './pages/BikeDetail'
-import Settings from './pages/Settings'
-import { ThemeSwitcher } from './components/ThemeSwitcher'
+import Home from './pages/Home';
+import Track from './pages/Track';
+import Profile from './pages/Profile';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import Activities from './pages/Activities';
+import ActivityDetail from './pages/ActivityDetail';
+import Shop from './pages/Shop';
+import Warranty from './pages/Warranty';
+import Contact from './pages/Contact';
+import ServiceCenters from './pages/ServiceCenters';
+import BikeDetail from './pages/BikeDetail';
+import Settings from './pages/Settings';
 
-// Redirect root to /login
+import Splash from './components/Splash';
+import { ThemeProvider, ThemeSwitcher } from './components/ThemeSwitcher';
+
+function useBoot() {
+  const [booting, setBooting] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setBooting(false), 1200); // show splash ~1.2s
+    return () => clearTimeout(t);
+  }, []);
+  return booting;
+}
+
+function isAuthed() {
+  return !!localStorage.getItem('govv_token');
+}
+
 function AuthGate() {
-  return <Navigate to="/login" replace />
+  return isAuthed() ? <Navigate to="/home" replace /> : <Navigate to="/login" replace />;
 }
 
 function Drawer({ open, onClose }) {
   return (
     <div className={'drawer ' + (open ? 'open' : '')}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-        <b>More</b><button className="btn-ghost" onClick={onClose}>Close</button>
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8 }}>
+        <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+          <img src="/govv-logo.png" alt="govv" width="24" height="24" />
+          <b>Go VV</b>
+        </div>
+        <button className="btn-ghost" onClick={onClose}>Close</button>
       </div>
-      <nav style={{ display: 'grid', gap: 8 }} onClick={onClose}>
+      <nav style={{ display:'grid', gap:8 }} onClick={onClose}>
         <NavLink to="/dashboard" className="badge">Dashboard</NavLink>
         <NavLink to="/activities" className="badge">History / Activities</NavLink>
         <NavLink to="/shop" className="badge">Shop</NavLink>
@@ -40,36 +56,32 @@ function Drawer({ open, onClose }) {
         <NavLink to="/service-centers" className="badge">Service Centers</NavLink>
         <NavLink to="/contact" className="badge">Contact</NavLink>
         <NavLink to="/settings" className="badge">Settings</NavLink>
-        <NavLink to="/login" className="badge">Login / Signup</NavLink>
+        {!isAuthed() ? <NavLink to="/login" className="badge">Login / Signup</NavLink> : null}
       </nav>
-      <div style={{ marginTop: 16 }}><ThemeSwitcher /></div>
+      <div style={{ marginTop:16 }}><ThemeSwitcher /></div>
     </div>
-  )
+  );
 }
 
-function BottomTabs() {
+function BottomTabs(){
   return (
     <div className="bottom-nav">
       <NavLink to="/home" className="bottom-link badge">Home</NavLink>
       <NavLink to="/track" className="bottom-link badge">Track</NavLink>
       <NavLink to="/profile" className="bottom-link badge">Profile</NavLink>
     </div>
-  )
+  );
 }
 
 function RoutesWithAnimation() {
-  const location = useLocation()
+  const location = useLocation();
   return (
     <AnimatePresence mode="wait">
-      <motion.div
-        key={location.pathname}
-        initial={{ opacity: 0, x: 10 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -10 }}
-      >
+      <motion.div initial={{ opacity:0, x:10 }} animate={{ opacity:1, x:0 }} exit={{ opacity:0, x:-10 }} key={location.pathname}>
         <Routes location={location}>
           <Route path="/" element={<AuthGate />} />
           <Route path="/login" element={<Login />} />
+          {/* Main app */}
           <Route path="/home" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
@@ -85,19 +97,26 @@ function RoutesWithAnimation() {
         </Routes>
       </motion.div>
     </AnimatePresence>
-  )
+  );
 }
 
 export default function App() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+  const booting = useBoot();
+
+  if (booting) return <Splash />;
+
   return (
-    <BrowserRouter>
-      <button className="hamburger badge" onClick={() => setOpen(true)}>☰</button>
-      <Drawer open={open} onClose={() => setOpen(false)} />
-      <BottomTabs />
-      <RoutesWithAnimation />
-    </BrowserRouter>
-  )
+    <ThemeProvider>
+      <BrowserRouter>
+        <button className="hamburger badge" onClick={() => setOpen(true)}>☰</button>
+        <Drawer open={open} onClose={() => setOpen(false)} />
+        {isAuthed() && <BottomTabs />}
+        <RoutesWithAnimation />
+      </BrowserRouter>
+    </ThemeProvider>
+  );
 }
+
 
 
