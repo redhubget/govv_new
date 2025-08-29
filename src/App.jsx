@@ -5,7 +5,7 @@ import { useState } from 'react'
 import './index.css'
 import './app.css'
 
-// Pages (these already exist in your repo)
+// Pages
 import Home from './pages/Home'
 import Track from './pages/Track'
 import Profile from './pages/Profile'
@@ -21,6 +21,7 @@ import BikeDetail from './pages/BikeDetail'
 import Settings from './pages/Settings'
 import { ThemeSwitcher } from './components/ThemeSwitcher'
 
+// Redirect root to /login
 function AuthGate() {
   return <Navigate to="/login" replace />
 }
@@ -46,7 +47,7 @@ function Drawer({ open, onClose }) {
   )
 }
 
-function BottomTabs(){
+function BottomTabs() {
   return (
     <div className="bottom-nav">
       <NavLink to="/home" className="bottom-link badge">Home</NavLink>
@@ -60,24 +61,28 @@ function RoutesWithAnimation() {
   const location = useLocation()
   return (
     <AnimatePresence mode="wait">
-      <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} key={location.pathname}>
-       <Routes location={location}>
-  <Route path="/" element={<AuthGate />} />
-  <Route path="/login" element={<Login />} />
-  <Route path="/home" element={<Home />} />
-  <Route path="/dashboard" element={<Dashboard />} />
-  <Route path="/profile" element={<Profile />} />
-  <Route path="/track" element={<Track />} />
-  <Route path="/activities" element={<Activities />} />
-  <Route path="/activity/:id" element={<ActivityDetail />} />
-  <Route path="/shop" element={<Shop />} />
-  <Route path="/warranty" element={<Warranty />} />
-  <Route path="/contact" element={<Contact />} />
-  <Route path="/service-centers" element={<ServiceCenters />} />
-  <Route path="/bike/:id" element={<BikeDetail />} />
-  <Route path="/settings" element={<Settings />} />
-</Routes>
-
+      <motion.div
+        key={location.pathname}
+        initial={{ opacity: 0, x: 10 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -10 }}
+      >
+        <Routes location={location}>
+          <Route path="/" element={<AuthGate />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/track" element={<Track />} />
+          <Route path="/activities" element={<Activities />} />
+          <Route path="/activity/:id" element={<ActivityDetail />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/warranty" element={<Warranty />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/service-centers" element={<ServiceCenters />} />
+          <Route path="/bike/:id" element={<BikeDetail />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
       </motion.div>
     </AnimatePresence>
   )
@@ -94,4 +99,5 @@ export default function App() {
     </BrowserRouter>
   )
 }
+
 
