@@ -1,46 +1,33 @@
 // src/api/index.js
-const API = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
+const API =
+  (import.meta.env.VITE_API_URL && import.meta.env.VITE_API_URL.replace(/\/$/, "")) ||
+  "https://govv-new.onrender.com/api"; // hard fallback so prod never hits relative /api
 
-// Generic GET
-async function get(path) {
+// small helper
+async function request(path, options = {}) {
   const res = await fetch(`${API}${path}`, {
     headers: { "Content-Type": "application/json" },
     credentials: "include",
-  });
-  if (!res.ok) throw new Error(await res.text());
-  return res.json();
-}
-
-// Generic POST
-async function post(path, body) {
-  const res = await fetch(`${API}${path}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify(body),
+    ...options,
   });
   if (!res.ok) throw new Error(await res.text());
   return res.json();
 }
 
 export const api = {
-  // Auth
-  sendOTP: (data) => post("/auth/send-otp", data),
-  verifyOTP: (data) => post("/auth/verify-otp", data),
+  sendOTP: (data) => request("/auth/send-otp", { method: "POST", body: JSON.stringify(data) }),
+  verifyOTP: (data) => request("/auth/verify-otp", { method: "POST", body: JSON.stringify(data) }),
 
-  // Bikes
-  linkBike: (data) => post("/bikes/link", data),
-  getBike: (id) => get(`/bikes/${id}`),
-  toggleLock: (id) => post(`/bikes/${id}/lock`, {}),
+  getActivities: (userId) => request(`/activities/${userId}`),
+  getActivity: (id) => request(`/activities/${id}`),
 
-  // Warranty
-  getWarranty: (serial) => get(`/warranty/${serial}`),
-  claimWarranty: (data) => post(`/warranty/claim`, data),
+  linkBike: (data) => request("/bikes/link", { method: "POST", body: JSON.stringify(data) }),
+  getBike: (id) => request(`/bikes/${id}`),
+  toggleLock: (id) => request(`/bikes/${id}/lock`, { method: "POST", body: "{}" }),
 
-  // Contact
-  sendContact: (data) => post(`/contact/send`, data),
+  getWarranty: (serial) => request(`/warranty/${serial}`),
+  claimWarranty: (data) => request("/warranty/claim", { method: "POST", body: JSON.stringify(data) }),
 
-  // Activities
-  getActivities: (userId) => get(`/activities/${userId}`),
-  getActivity: (id) => get(`/activities/${id}`),
+  sendContact: (data) => request("/contact/send", { method: "POST", body: JSON.stringify(data) }),
 };
+
