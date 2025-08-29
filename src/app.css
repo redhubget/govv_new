@@ -206,11 +206,11 @@ textarea {
   width: 100%;
   padding: 12px 14px;
   border-radius: 12px;
-  background: var(--card);                    /* contrast against card */
-  color: var(--text);                         /* make text visible */
+  background: var(--card);                    
+  color: #16a34a;          /* ✅ force green for typed text */
   border: 1px solid color-mix(in srgb, var(--accent) 12%, #00000020);
   outline: none;
-  caret-color: var(--accent);
+  caret-color: #16a34a;    /* ✅ green cursor */
 }
 
 .input::placeholder,
@@ -223,12 +223,12 @@ textarea::placeholder {
 .input:focus,
 input:focus,
 textarea:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+  border-color: #16a34a;   /* ✅ green border on focus */
+  box-shadow: 0 0 0 3px color-mix(in srgb, #16a34a 25%, transparent);
 }
 
 /* Autofill (Chrome/Safari) keeps text visible */
 input:-webkit-autofill {
-  -webkit-text-fill-color: var(--text) !important;
+  -webkit-text-fill-color: #16a34a !important;   /* ✅ keep autofill text green */
   transition: background-color 99999s ease-in-out 0s;
 }
