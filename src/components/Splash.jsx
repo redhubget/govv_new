@@ -1,10 +1,15 @@
+// src/components/Splash.jsx
+import React from "react";
+
 export default function Splash() {
   return (
     <div className="splash-wrap">
-      <div>
-        <img src="/govv-logo.png" alt="GoVV" className="splash-logo" />
-        <div className="splash-brand"></div>
-      </div>
+      <img
+        src="/govv-logo.png" // must match public/govv-logo.png
+        alt="Go VV Logo"
+        className="splash-logo"
+      />
     </div>
   );
 }
+
