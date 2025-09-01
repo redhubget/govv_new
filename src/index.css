@@ -199,4 +199,8 @@ input:-webkit-autofill {
   transition: background-color 99999s ease-in-out 0s;
 }
 
+/* Leaflet needs an explicit height on its container */
+.map-wrap { height: 360px; }
+@media (min-width: 768px) { .map-wrap { height: 420px; } }
+
 
