@@ -25,6 +25,7 @@ import Settings from "./pages/Settings"
 import Splash from "./components/Splash"
 import { ThemeProvider, ThemeSwitcher } from "./components/ThemeSwitcher"
 
+/* ✅ Splash hook */
 function useBoot() {
   const [booting, setBooting] = useState(true)
   useEffect(() => {
@@ -34,14 +35,17 @@ function useBoot() {
   return booting
 }
 
+/* ✅ check token */
 function isAuthed() {
   return !!localStorage.getItem("govv_token")
 }
 
+/* ✅ route guard */
 function AuthGate() {
   return isAuthed() ? <Navigate to="/home" replace /> : <Navigate to="/login" replace />
 }
 
+/* ✅ drawer */
 function Drawer({ open, onClose }) {
   return (
     <div className={"drawer " + (open ? "open" : "")}>
@@ -62,11 +66,14 @@ function Drawer({ open, onClose }) {
         <NavLink to="/settings" className="badge">Settings</NavLink>
         {!isAuthed() ? <NavLink to="/login" className="badge">Login / Signup</NavLink> : null}
       </nav>
-      <div style={{ marginTop: 16 }}><ThemeSwitcher /></div>
+      <div style={{ marginTop: 16 }}>
+        <ThemeSwitcher />
+      </div>
     </div>
   )
 }
 
+/* ✅ bottom nav */
 function BottomTabs({ onHamburger }) {
   return (
     <div className="bottom-nav">
@@ -78,6 +85,7 @@ function BottomTabs({ onHamburger }) {
   )
 }
 
+/* ✅ routes with animation */
 function RoutesWithAnimation() {
   const location = useLocation()
   return (
@@ -109,6 +117,7 @@ function RoutesWithAnimation() {
   )
 }
 
+/* ✅ main app */
 export default function App() {
   const [open, setOpen] = useState(false)
   const booting = useBoot()
@@ -125,6 +134,7 @@ export default function App() {
     </ThemeProvider>
   )
 }
+
 
 
 
