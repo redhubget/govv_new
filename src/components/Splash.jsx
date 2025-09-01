@@ -5,7 +5,7 @@ export default function Splash() {
   return (
     <div className="splash-wrap">
       <img
-        src="/govv-logo.png" // must match public/govv-logo.png
+        src="public/govv-logo.png" // must match public/govv-logo.png
         alt="Go VV Logo"
         className="splash-logo"
       />
