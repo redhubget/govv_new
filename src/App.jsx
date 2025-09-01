@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, NavLink, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import 'leaflet/dist/leaflet.css';
+
 
 import './index.css';
 
