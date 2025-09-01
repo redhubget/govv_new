@@ -36,17 +36,8 @@ body {
 }
 
 /* ---------- Utilities ---------- */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 16px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 16px;
-}
+.container { max-width: 1200px; margin: 0 auto; padding: 16px; }
+.grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
 
 :root { --card-shadow: 0 8px 20px rgba(0,0,0,.08); --radius: 18px; }
 
@@ -62,9 +53,7 @@ body {
 }
 
 /* Fade-in for cards */
-@keyframes fadeIn {
-  to { opacity: 1; transform: none; }
-}
+@keyframes fadeIn { to { opacity: 1; transform: none; } }
 
 button {
   border: none;
@@ -78,19 +67,10 @@ button {
 }
 button:active { transform: scale(.98); }
 
-.btn-ghost {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text);
-}
+.btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
 
-.btn-outline {
-  background: transparent;
-  border: 1px solid var(--accent);
-  color: var(--accent);
-}
-
-/* badges, nav, etc. */
+/* ---------- Badges, nav, etc. ---------- */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -103,15 +83,19 @@ button:active { transform: scale(.98); }
 
 .nav { position: sticky; top: 0; z-index: 10; }
 
+/* ✅ Bottom navigation bar */
 .bottom-nav {
-  position: fixed; left: 0; right: 0; bottom: 0;
-  background: color-mix(in srgb, var(--bg) 70%, #00000020);
-  backdrop-filter: blur(6px);
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  background: var(--card);
   border-top: 1px solid var(--border);
-  display: flex; gap: 8px; justify-content: space-around;
-  padding: 10px 12px; z-index: 20;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0;
+  z-index: 50;
 }
-.bottom-link { color: inherit; text-decoration: none; }
+.bottom-link { color: inherit; text-decoration: none; font-size: 14px; }
 
 /* Drawer */
 .drawer {
@@ -121,11 +105,11 @@ button:active { transform: scale(.98); }
   box-shadow: -10px 0 30px rgba(0,0,0,.35);
   transform: translateX(100%);
   transition: transform .25s ease;
-  padding: 16px; z-index: 30;
+  padding: 16px; z-index: 100;
 }
 .drawer.open { transform: none; }
 
-/* Skeletons */
+/* Skeleton loaders */
 .skeleton {
   background: linear-gradient(90deg, #0000, #00000010, #0000);
   animation: sk 1.1s infinite;
@@ -147,7 +131,7 @@ button:active { transform: scale(.98); }
   filter: drop-shadow(0 8px 20px rgba(0,0,0,.08));
 }
 
-/* ---- Auth inputs: white in light + dark variant ---- */
+/* ✅ Inputs (white for light, dark bg for dark mode) */
 .input,
 input[type="text"],
 input[type="tel"],
@@ -157,22 +141,16 @@ textarea {
   width: 100%;
   padding: 12px 14px;
   border-radius: 12px;
-
-  /* Light mode */
-  background: #ffffff;
+  background: #ffffff; /* light mode default white */
   color: #0b0f14;
   border: 1px solid #d1d5db;
-
   outline: none;
   caret-color: var(--accent);
   transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
 }
 
 :root[data-theme="dark"] .input,
-:root[data-theme="dark"] input[type="text"],
-:root[data-theme="dark"] input[type="tel"],
-:root[data-theme="dark"] input[type="password"],
-:root[data-theme="dark"] input[type="number"],
+:root[data-theme="dark"] input,
 :root[data-theme="dark"] textarea {
   background: #0e141d;
   color: #e9eef5;
@@ -181,10 +159,7 @@ textarea {
 
 .input::placeholder,
 input::placeholder,
-textarea::placeholder {
-  color: var(--muted);
-  opacity: 0.85;
-}
+textarea::placeholder { color: var(--muted); opacity: 0.85; }
 
 .input:focus,
 input:focus,
@@ -199,8 +174,9 @@ input:-webkit-autofill {
   transition: background-color 99999s ease-in-out 0s;
 }
 
-/* Leaflet needs an explicit height on its container */
-.map-wrap { height: 360px; }
+/* ✅ Leaflet map container fix */
+.map-wrap { height: 360px; border-radius: 16px; overflow: hidden; }
 @media (min-width: 768px) { .map-wrap { height: 420px; } }
+
 
 
