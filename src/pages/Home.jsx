@@ -50,7 +50,7 @@ export default function Home() {
         >
           <div style={{ position: "relative" }}>
             <img
-              src="/bike.png" // must match public/bike.png
+              src="public/bike.png" // must match public/bike.png
               alt="Go VV Bike"
               style={{ maxWidth: "100%", borderRadius: "12px" }}
             />
