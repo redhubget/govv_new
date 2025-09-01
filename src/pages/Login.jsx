@@ -13,9 +13,11 @@ export default function Login() {
   const [error, setError] = useState("")
   const navigate = useNavigate()
 
+  // ✅ validators
   const phoneValid = useMemo(() => /^\+?\d{8,15}$/.test(phone.trim()), [phone])
   const otpValid = useMemo(() => /^\d{4,8}$/.test(otp.trim()), [otp])
 
+  // ✅ send OTP
   const send = async () => {
     setLoading(true)
     setError("")
@@ -29,12 +31,13 @@ export default function Login() {
     }
   }
 
+  // ✅ verify OTP
   const verify = async () => {
     setLoading(true)
     setError("")
     try {
       const { token, user } = await api.verifyOTP({ phone: phone.trim(), otp: otp.trim() })
-      // ✅ Save token so bottom nav shows
+      // save token so nav shows
       localStorage.setItem("govv_token", token)
       setAuth(user, token)
       navigate("/home", { replace: true })
@@ -49,11 +52,13 @@ export default function Login() {
     <div className="container">
       <div className="card" style={{ maxWidth: 480, margin: "20px auto" }}>
         <h2>Login / Signup</h2>
+
         {error && (
           <div className="badge" style={{ background: "#ef4444", color: "#fff", marginBottom: 10 }}>
             {error}
           </div>
         )}
+
         <input
           className="input"
           type="tel"
@@ -63,6 +68,7 @@ export default function Login() {
           onChange={(e) => setPhone(e.target.value)}
           disabled={sent || loading}
         />
+
         {!sent ? (
           <button onClick={send} disabled={!phoneValid || loading} style={{ marginTop: 12, width: "100%" }}>
             {loading ? "Sending…" : "Send OTP"}
@@ -88,6 +94,7 @@ export default function Login() {
     </div>
   )
 }
+
 
 
 
