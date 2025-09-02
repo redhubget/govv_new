@@ -1,4 +1,3 @@
-// src/pages/BikeDetail.jsx
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -13,6 +12,7 @@ import {
 /**
  * BikeDetail Page
  * - Shows bike details (dummy specs for now)
+ * - Displays bike image
  * - Displays telemetry chart
  * - Handles lock/unlock (dummy state)
  */
@@ -64,16 +64,30 @@ export default function BikeDetail() {
   return (
     <div className="container">
       {/* Bike Info */}
-      <div className="card">
+      <div className="card" style={{ textAlign: "center" }}>
         <h2>{bike.name}</h2>
         <div className="badge">Serial: {bike.serial}</div>
-        <ul style={{ marginTop: 8, lineHeight: "1.6" }}>
+
+        {/* ✅ Bike Image */}
+        <img
+          src="/Bike.png"
+          alt="Go VV Bike"
+          style={{
+            maxWidth: "100%",
+            borderRadius: "12px",
+            margin: "16px auto",
+            display: "block",
+          }}
+        />
+
+        <ul style={{ marginTop: 8, lineHeight: "1.6", textAlign: "left" }}>
           <li>📅 Year: {bike.year}</li>
           <li>🆔 Model: {bike.model}</li>
           <li>🔋 Battery: {bike.battery}</li>
           <li>📍 Range: {bike.range}</li>
           <li>⚡ Top Speed: {bike.topSpeed}</li>
         </ul>
+
         <div style={{ marginTop: 12 }}>
           <button
             onClick={toggleLock}
@@ -107,3 +121,4 @@ export default function BikeDetail() {
     </div>
   );
 }
+
