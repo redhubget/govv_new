@@ -13,7 +13,7 @@ export default function Home() {
   const [locked, setLocked] = useState(false);
   const [lockBusy, setLockBusy] = useState(false);
 
-  // Dummy bike stats
+  // Dummy bike stats (could be API driven later)
   const batteryPct = 72;
   const estRangeKm = 45;
 
@@ -31,6 +31,7 @@ export default function Home() {
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
         className="grid"
       >
         {/* Header card */}
@@ -53,19 +54,25 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Bike image + lock button */}
+        {/* Bike image + controls */}
         <div
           className="card"
           style={{ gridColumn: "span 12", textAlign: "center" }}
         >
           <div style={{ position: "relative" }}>
+            {/* ✅ image loaded from public/ correctly */}
             <img
-              src="/bike.png" // ✅ Correct way to load from public
+              src="/bike.png"
               alt="Go VV Bike"
-              style={{ maxWidth: "100%", borderRadius: "12px" }}
+              style={{
+                maxWidth: "100%",
+                borderRadius: "12px",
+                margin: "0 auto",
+                display: "block",
+              }}
             />
 
-            {/* Status badge */}
+            {/* Status badge overlay */}
             <div
               className="badge"
               style={{
@@ -110,7 +117,7 @@ export default function Home() {
               {lockBusy ? "Please wait…" : locked ? "Unlock" : "Lock"}
             </button>
 
-            {/* ✅ Updated navigation to Bike Detail page */}
+            {/* ✅ Navigate to Bike Detail page */}
             <Link to="/bike/1" className="badge">
               Bike Detail
             </Link>
@@ -135,3 +142,4 @@ export default function Home() {
     </div>
   );
 }
+
