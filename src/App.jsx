@@ -14,7 +14,8 @@ import Dashboard from "./pages/Dashboard";
 import Activities from "./pages/Activities";
 import ActivityDetail from "./pages/ActivityDetail";
 import Shop from "./pages/Shop";
-import Cart from "./pages/Cart";  // ✅ NEW
+import Cart from "./pages/Cart";  
+import Checkout from "./pages/Checkout";  // ✅ NEW
 import Warranty from "./pages/Warranty";
 import Contact from "./pages/Contact";
 import ServiceCenters from "./pages/ServiceCenters";
@@ -66,7 +67,7 @@ function Drawer({ open, onClose }) {
         <NavLink to="/dashboard" className="badge">Dashboard</NavLink>
         <NavLink to="/activities" className="badge">History / Activities</NavLink>
         <NavLink to="/shop" className="badge">Shop</NavLink>
-        <NavLink to="/cart" className="badge">🛒 Cart ({totalQty})</NavLink> {/* ✅ */}
+        <NavLink to="/cart" className="badge">🛒 Cart ({totalQty})</NavLink>
         <NavLink to="/warranty" className="badge">Warranty</NavLink>
         <NavLink to="/service-centers" className="badge">Service Centers</NavLink>
         <NavLink to="/contact" className="badge">Contact</NavLink>
@@ -139,7 +140,8 @@ function RoutesWithAnimation() {
           <Route path="/activities" element={<Activities />} />
           <Route path="/activity/:id" element={<ActivityDetail />} />
           <Route path="/shop" element={<Shop />} />
-          <Route path="/cart" element={<Cart />} /> {/* ✅ */}
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} /> {/* ✅ NEW */}
           <Route path="/warranty" element={<Warranty />} />
           <Route path="/warranty/terms" element={<WarrantyTerms />} />
           <Route path="/contact" element={<Contact />} />
@@ -169,6 +171,7 @@ export default function App() {
     </ThemeProvider>
   );
 }
+
 
 
 
