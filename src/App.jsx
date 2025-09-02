@@ -53,7 +53,7 @@ function Drawer({ open, onClose }) {
     <div className={"drawer " + (open ? "open" : "")}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <img src="/govv-logo.png" alt="govv" width="24" height="24" />
+          <img src="/GOVV.png" alt="govv" width="24" height="24" />
           <b>Go VV</b>
         </div>
         <button className="btn-ghost" onClick={onClose}>Close</button>
