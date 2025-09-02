@@ -1,54 +1,58 @@
-// src/App.jsx
-import { BrowserRouter, Routes, Route, NavLink, useLocation, Navigate } from "react-router-dom"
-import { AnimatePresence, motion } from "framer-motion"
-import { useEffect, useState } from "react"
-import "leaflet/dist/leaflet.css"
+import { BrowserRouter, Routes, Route, NavLink, useLocation, Navigate } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import "leaflet/dist/leaflet.css";
 import WarrantyTerms from "./pages/WarrantyTerms";
-
-
-import "./index.css"
+import "./index.css";
 
 // Pages
-import Home from "./pages/Home"
-import Track from "./pages/Track"
-import Profile from "./pages/Profile"
-import Login from "./pages/Login"
-import Dashboard from "./pages/Dashboard"
-import Activities from "./pages/Activities"
-import ActivityDetail from "./pages/ActivityDetail"
-import Shop from "./pages/Shop"
-import Warranty from "./pages/Warranty"
-import Contact from "./pages/Contact"
-import ServiceCenters from "./pages/ServiceCenters"
-import BikeDetail from "./pages/BikeDetail"
-import Settings from "./pages/Settings"
+import Home from "./pages/Home";
+import Track from "./pages/Track";
+import Profile from "./pages/Profile";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import Activities from "./pages/Activities";
+import ActivityDetail from "./pages/ActivityDetail";
+import Shop from "./pages/Shop";
+import Cart from "./pages/Cart";  // ✅ NEW
+import Warranty from "./pages/Warranty";
+import Contact from "./pages/Contact";
+import ServiceCenters from "./pages/ServiceCenters";
+import BikeDetail from "./pages/BikeDetail";
+import Settings from "./pages/Settings";
 
 // Components
-import Splash from "./components/Splash"
-import { ThemeProvider, ThemeSwitcher } from "./components/ThemeSwitcher"
+import Splash from "./components/Splash";
+import { ThemeProvider, ThemeSwitcher } from "./components/ThemeSwitcher";
+
+// Cart store
+import { useCart } from "./store/cart";
 
 /* ✅ Splash hook */
 function useBoot() {
-  const [booting, setBooting] = useState(true)
+  const [booting, setBooting] = useState(true);
   useEffect(() => {
-    const t = setTimeout(() => setBooting(false), 1200)
-    return () => clearTimeout(t)
-  }, [])
-  return booting
+    const t = setTimeout(() => setBooting(false), 1200);
+    return () => clearTimeout(t);
+  }, []);
+  return booting;
 }
 
 /* ✅ check token */
 function isAuthed() {
-  return !!localStorage.getItem("govv_token")
+  return !!localStorage.getItem("govv_token");
 }
 
 /* ✅ route guard */
 function AuthGate() {
-  return isAuthed() ? <Navigate to="/home" replace /> : <Navigate to="/login" replace />
+  return isAuthed() ? <Navigate to="/home" replace /> : <Navigate to="/login" replace />;
 }
 
 /* ✅ drawer */
 function Drawer({ open, onClose }) {
+  const { items } = useCart();
+  const totalQty = items.reduce((sum, it) => sum + it.qty, 0);
+
   return (
     <div className={"drawer " + (open ? "open" : "")}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
@@ -62,6 +66,7 @@ function Drawer({ open, onClose }) {
         <NavLink to="/dashboard" className="badge">Dashboard</NavLink>
         <NavLink to="/activities" className="badge">History / Activities</NavLink>
         <NavLink to="/shop" className="badge">Shop</NavLink>
+        <NavLink to="/cart" className="badge">🛒 Cart ({totalQty})</NavLink> {/* ✅ */}
         <NavLink to="/warranty" className="badge">Warranty</NavLink>
         <NavLink to="/service-centers" className="badge">Service Centers</NavLink>
         <NavLink to="/contact" className="badge">Contact</NavLink>
@@ -72,19 +77,45 @@ function Drawer({ open, onClose }) {
         <ThemeSwitcher />
       </div>
     </div>
-  )
+  );
 }
 
 /* ✅ bottom nav */
 function BottomTabs({ onHamburger }) {
+  const { items } = useCart();
+  const totalQty = items.reduce((sum, it) => sum + it.qty, 0);
+
   return (
     <div className="bottom-nav">
       <NavLink to="/home" className="bottom-link badge">🏠 Home</NavLink>
       <NavLink to="/track" className="bottom-link badge">📍 Track</NavLink>
       <NavLink to="/profile" className="bottom-link badge">👤 Profile</NavLink>
+
+      <NavLink to="/cart" className="bottom-link badge" style={{ position: "relative" }}>
+        🛒 Cart
+        {totalQty > 0 && (
+          <span
+            style={{
+              position: "absolute",
+              top: -6,
+              right: -6,
+              background: "#ef4444",
+              color: "#fff",
+              fontSize: "0.75rem",
+              fontWeight: "bold",
+              borderRadius: "999px",
+              padding: "2px 6px",
+              lineHeight: 1,
+            }}
+          >
+            {totalQty}
+          </span>
+        )}
+      </NavLink>
+
       <button className="bottom-link badge" onClick={onHamburger}>☰</button>
     </div>
-  )
+  );
 }
 
 /* ✅ routes with animation */
@@ -108,8 +139,9 @@ function RoutesWithAnimation() {
           <Route path="/activities" element={<Activities />} />
           <Route path="/activity/:id" element={<ActivityDetail />} />
           <Route path="/shop" element={<Shop />} />
+          <Route path="/cart" element={<Cart />} /> {/* ✅ */}
           <Route path="/warranty" element={<Warranty />} />
-          <Route path="/warranty/terms" element={<WarrantyTerms />} /> {/* ✅ Add this */}
+          <Route path="/warranty/terms" element={<WarrantyTerms />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/service-centers" element={<ServiceCenters />} />
           <Route path="/bike/:id" element={<BikeDetail />} />
@@ -122,10 +154,10 @@ function RoutesWithAnimation() {
 
 /* ✅ main app */
 export default function App() {
-  const [open, setOpen] = useState(false)
-  const booting = useBoot()
+  const [open, setOpen] = useState(false);
+  const booting = useBoot();
 
-  if (booting) return <Splash />
+  if (booting) return <Splash />;
 
   return (
     <ThemeProvider>
@@ -135,8 +167,9 @@ export default function App() {
         {isAuthed() && <BottomTabs onHamburger={() => setOpen(true)} />}
       </BrowserRouter>
     </ThemeProvider>
-  )
+  );
 }
+
 
 
 
