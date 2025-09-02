@@ -44,5 +44,39 @@
       "address": "Koramangala"
     }
   ],
-  "telemetry": []
+  "telemetry": [],
+  "shop": [
+    {
+      "id": 1,
+      "name": "Helmet",
+      "price": 1200,
+      "img": "/accessories/helmet.png"
+    },
+    {
+      "id": 2,
+      "name": "Phone Holder",
+      "price": 800,
+      "img": "/accessories/holder.png"
+    },
+    {
+      "id": 3,
+      "name": "LED Light",
+      "price": 600,
+      "img": "/accessories/light.png"
+    },
+    {
+      "id": 4,
+      "name": "Mount",
+      "price": 500,
+      "img": "/accessories/mount.png"
+    },
+    {
+      "id": 5,
+      "name": "U-Lock",
+      "price": 900,
+      "img": "/accessories/ulock.png"
+    }
+  ],
+  "bookings": [],
+  "settings": {}
 }

@@ -1,22 +1,55 @@
-import { useState } from 'react'
-import { api } from '../api'
-export default function Warranty(){
-  const [serial, setSerial] = useState(''); const [w, setW] = useState(null); const [desc,setDesc]=useState(''); const [msg,setMsg]=useState('')
-  const lookup = async()=> setW(await api.warranty(serial))
-  const claim = async()=>{ const res=await api.warrantyClaim({serial, description:desc, user_id:'me', attachments:[]}); setMsg('Claim submitted: '+res.claim.id); setW(await api.warranty(serial)) }
-  return (<div className="container">
-    <div className="card"><h2>Warranty Lookup</h2>
-      <input placeholder="Enter Serial" value={serial} onChange={e=> setSerial(e.target.value)} style={{padding:10,borderRadius:10,width:'100%'}}/>
-      <button onClick={lookup} style={{marginTop:8}}>Check</button>
+// src/pages/Warranty.jsx
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+export default function Warranty() {
+  const [serial, setSerial] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!serial.trim()) {
+      alert("Enter serial number");
+      return;
+    }
+    // Save to localStorage for persistence
+    localStorage.setItem("warranty_serial", serial);
+    navigate("/warranty/terms");
+  };
+
+  return (
+    <div className="container">
+      <div className="card" style={{ maxWidth: 400, margin: "0 auto" }}>
+        <h2>Warranty Lookup</h2>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Enter Serial Number"
+            value={serial}
+            onChange={(e) => setSerial(e.target.value)}
+            style={{
+              padding: 10,
+              border: "1px solid #ccc",
+              borderRadius: 8,
+              width: "100%",
+              marginBottom: 12,
+            }}
+          />
+          <button
+            type="submit"
+            style={{
+              padding: "10px 14px",
+              borderRadius: 8,
+              background: "#3b82f6",
+              color: "#fff",
+              border: "none",
+              width: "100%",
+            }}
+          >
+            Submit
+          </button>
+        </form>
+      </div>
     </div>
-    {w && (<div className="card">
-      <div className="badge">Status: {w.status}</div>
-      <p>Purchase: {w.purchase_date} • Valid until: {w.valid_until}</p>
-      <h3>Claims</h3><ul>{w.claims.map(c=> <li key={c.id}>#{c.id} — {new Date(c.ts).toLocaleString()}</li>)}</ul>
-      <h3>New Claim</h3>
-      <textarea placeholder="Describe the issue" value={desc} onChange={e=> setDesc(e.target.value)} style={{width:'100%',minHeight:80,borderRadius:10,padding:10}}/>
-      <button onClick={claim} style={{marginTop:8}}>Submit Claim</button>
-      {msg && <div className="badge" style={{marginTop:8}}>{msg}</div>}
-    </div>)}
-  </div>)
+  );
 }

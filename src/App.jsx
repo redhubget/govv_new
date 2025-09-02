@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, NavLink, useLocation, Navigate } from "re
 import { AnimatePresence, motion } from "framer-motion"
 import { useEffect, useState } from "react"
 import "leaflet/dist/leaflet.css"
+import WarrantyTerms from "./pages/WarrantyTerms";
+
 
 import "./index.css"
 
@@ -87,7 +89,7 @@ function BottomTabs({ onHamburger }) {
 
 /* ✅ routes with animation */
 function RoutesWithAnimation() {
-  const location = useLocation()
+  const location = useLocation();
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -107,6 +109,7 @@ function RoutesWithAnimation() {
           <Route path="/activity/:id" element={<ActivityDetail />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/warranty" element={<Warranty />} />
+          <Route path="/warranty/terms" element={<WarrantyTerms />} /> {/* ✅ Add this */}
           <Route path="/contact" element={<Contact />} />
           <Route path="/service-centers" element={<ServiceCenters />} />
           <Route path="/bike/:id" element={<BikeDetail />} />
@@ -114,7 +117,7 @@ function RoutesWithAnimation() {
         </Routes>
       </motion.div>
     </AnimatePresence>
-  )
+  );
 }
 
 /* ✅ main app */

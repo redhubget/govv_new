@@ -3,11 +3,19 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
+/**
+ * Home Page
+ * - Shows bike status (lock, battery, range)
+ * - Displays bike image (from /public)
+ * - Provides navigation to Bike Detail page
+ */
 export default function Home() {
-  const [locked, setLocked] = useState(false); // simple local state for now
+  const [locked, setLocked] = useState(false);
   const [lockBusy, setLockBusy] = useState(false);
-  const batteryPct = 72; // dummy data
-  const estRangeKm = 45; // dummy data
+
+  // Dummy bike stats
+  const batteryPct = 72;
+  const estRangeKm = 45;
 
   const toggleLock = () => {
     if (lockBusy) return;
@@ -38,7 +46,9 @@ export default function Home() {
           >
             <div className="badge">🚲 Go VV</div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              <div className="badge">{locked ? "🔒 Locked" : "🔓 Unlocked"}</div>
+              <div className="badge">
+                {locked ? "🔒 Locked" : "🔓 Unlocked"}
+              </div>
             </div>
           </div>
         </div>
@@ -50,10 +60,12 @@ export default function Home() {
         >
           <div style={{ position: "relative" }}>
             <img
-              src="public/bike.png" // must match public/bike.png
+              src="/bike.png" // ✅ Correct way to load from public
               alt="Go VV Bike"
               style={{ maxWidth: "100%", borderRadius: "12px" }}
             />
+
+            {/* Status badge */}
             <div
               className="badge"
               style={{
@@ -61,17 +73,16 @@ export default function Home() {
                 top: 10,
                 left: 10,
                 background: locked
-                  ? "color-mix(in srgb, #ef4444 18%, transparent)"
-                  : "color-mix(in srgb, #22c55e 18%, transparent)",
-                borderColor: locked
-                  ? "color-mix(in srgb, #ef4444 40%, #ffffff0f)"
-                  : "color-mix(in srgb, #22c55e 40%, #ffffff0f)",
+                  ? "rgba(239,68,68,0.2)"
+                  : "rgba(34,197,94,0.2)",
+                borderColor: locked ? "#ef4444" : "#22c55e",
               }}
             >
               {locked ? "🔒 Locked" : "🔓 Unlocked"}
             </div>
           </div>
 
+          {/* Controls */}
           <div
             style={{
               marginTop: 12,
@@ -99,7 +110,8 @@ export default function Home() {
               {lockBusy ? "Please wait…" : locked ? "Unlock" : "Lock"}
             </button>
 
-            <Link to="/bike/demo" className="badge">
+            {/* ✅ Updated navigation to Bike Detail page */}
+            <Link to="/bike/1" className="badge">
               Bike Detail
             </Link>
           </div>
@@ -123,6 +135,3 @@ export default function Home() {
     </div>
   );
 }
-
-
-
