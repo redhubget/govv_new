@@ -1,72 +1,73 @@
-// src/pages/Cart.jsx
-import { useState, useEffect } from "react";
+import { useCart } from "../store/cart";
+import { Link } from "react-router-dom";
 
-/**
- * Cart Page
- * - Displays items added to cart
- * - Allows removing items and shows total price
- */
 export default function Cart() {
-  const [cart, setCart] = useState([]);
+  const { items, updateQty, removeItem, clearCart } = useCart();
 
-  useEffect(() => {
-    setCart(JSON.parse(localStorage.getItem("cart")) || []);
-  }, []);
-
-  const removeFromCart = (id) => {
-    const newCart = cart.filter((item, idx) => idx !== id);
-    setCart(newCart);
-    localStorage.setItem("cart", JSON.stringify(newCart));
-  };
-
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  const subtotal = items.reduce((sum, it) => sum + it.price * it.qty, 0);
 
   return (
     <div className="container">
       <h2 style={{ marginBottom: 16 }}>Your Cart</h2>
 
-      {cart.length === 0 ? (
-        <div>No items in cart</div>
+      {items.length === 0 ? (
+        <div className="card">
+          Cart is empty. <Link to="/shop">Go to Shop</Link>
+        </div>
       ) : (
         <div className="grid" style={{ gap: 16 }}>
-          {cart.map((item, idx) => (
-            <div
-              className="card"
-              key={idx}
-              style={{ gridColumn: "span 12", display: "flex", gap: 12 }}
-            >
-              <img
-                src={item.img}
-                alt={item.name}
-                style={{ width: 80, height: 80, borderRadius: 8 }}
-              />
+          {items.map((it) => (
+            <div key={it.id} className="card" style={{ display: "flex", gap: 16 }}>
+              <img src={it.img} alt={it.name} style={{ width: 80, height: 80, borderRadius: 8 }} />
               <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600 }}>{item.name}</div>
-                <div>₹{item.price}</div>
-                <button
-                  onClick={() => removeFromCart(idx)}
-                  className="btn-ghost"
-                  style={{ marginTop: 6 }}
-                >
-                  Remove
-                </button>
+                <div style={{ fontWeight: 600 }}>{it.name}</div>
+                <div>₹{it.price}</div>
+                <div style={{ marginTop: 8, display: "flex", gap: 8, alignItems: "center" }}>
+                  <button onClick={() => updateQty(it.id, it.qty - 1)}>-</button>
+                  <span>{it.qty}</span>
+                  <button onClick={() => updateQty(it.id, it.qty + 1)}>+</button>
+                  <button
+                    onClick={() => removeItem(it.id)}
+                    style={{ marginLeft: "auto" }}
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
             </div>
           ))}
 
           {/* Total */}
-          <div
-            className="card"
-            style={{
-              gridColumn: "span 12",
-              textAlign: "right",
-              fontWeight: 600,
-            }}
-          >
-            Total: ₹{total}
+          <div className="card" style={{ textAlign: "right", fontWeight: 600 }}>
+            Subtotal: ₹{subtotal}
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <button
+              onClick={clearCart}
+              style={{
+                marginRight: 8,
+                background: "#ef4444",
+                color: "#fff",
+                padding: "8px 14px",
+                borderRadius: 8,
+              }}
+            >
+              Clear Cart
+            </button>
+            <button
+              style={{
+                background: "#22c55e",
+                color: "#fff",
+                padding: "8px 14px",
+                borderRadius: 8,
+              }}
+            >
+              Proceed to Checkout
+            </button>
           </div>
         </div>
       )}
     </div>
   );
 }
+
