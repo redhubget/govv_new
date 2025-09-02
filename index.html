@@ -4,13 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Go VV</title>
+
+    <!-- Progressive Web App (PWA) meta -->
+    <meta name="theme-color" content="#0b0f14" />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- Manifest for icons and PWA config -->
     <link rel="manifest" href="/manifest.json" />
   </head>
   <body>
+    <!-- React app mounts here -->
     <div id="root"></div>
+
+    <!-- ✅ Vite handles this: will be replaced with /assets/*.js in production -->
     <script type="module" src="/src/main.jsx"></script>
-    <meta name="theme-color" content="#0b0f14" />
-  <meta name="color-scheme" content="light dark" />
-  <link rel="manifest" href="/manifest.json" />
   </body>
 </html>
+
