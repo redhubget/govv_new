@@ -21,6 +21,7 @@ import Contact from "./pages/Contact";
 import ServiceCenters from "./pages/ServiceCenters";
 import BikeDetail from "./pages/BikeDetail";
 import Settings from "./pages/Settings";
+import OrderSuccess from "./pages/OrderSuccess";
 
 // Components
 import Splash from "./components/Splash";
@@ -148,6 +149,7 @@ function RoutesWithAnimation() {
           <Route path="/service-centers" element={<ServiceCenters />} />
           <Route path="/bike/:id" element={<BikeDetail />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/order-success" element={<OrderSuccess />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
