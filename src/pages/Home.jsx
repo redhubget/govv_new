@@ -62,7 +62,7 @@ export default function Home() {
           <div style={{ position: "relative" }}>
             {/* ✅ image loaded from public/ correctly */}
             <img
-              src="/bike.png"
+              src="/Bike.png"
               alt="Go VV Bike"
               style={{
                 maxWidth: "100%",
