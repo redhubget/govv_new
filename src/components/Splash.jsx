@@ -16,7 +16,7 @@ export default function Splash() {
     >
       {/* ✅ Image loaded from public folder */}
       <img
-        src="/govv-logo.png"
+        src="/GOVV.png"
         alt="GoVV Logo"
         style={{ width: 120, height: 120, marginBottom: 20 }}
       />
