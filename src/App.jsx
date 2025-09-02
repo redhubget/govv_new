@@ -14,8 +14,8 @@ import Dashboard from "./pages/Dashboard";
 import Activities from "./pages/Activities";
 import ActivityDetail from "./pages/ActivityDetail";
 import Shop from "./pages/Shop";
-import Cart from "./pages/Cart";  
-import Checkout from "./pages/Checkout";  // ✅ NEW
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";   // ✅ NEW
 import Warranty from "./pages/Warranty";
 import Contact from "./pages/Contact";
 import ServiceCenters from "./pages/ServiceCenters";
@@ -141,7 +141,7 @@ function RoutesWithAnimation() {
           <Route path="/activity/:id" element={<ActivityDetail />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} /> {/* ✅ NEW */}
+          <Route path="/checkout" element={<Checkout />} /> {/* ✅ */}
           <Route path="/warranty" element={<Warranty />} />
           <Route path="/warranty/terms" element={<WarrantyTerms />} />
           <Route path="/contact" element={<Contact />} />
@@ -157,7 +157,14 @@ function RoutesWithAnimation() {
 /* ✅ main app */
 export default function App() {
   const [open, setOpen] = useState(false);
+  const [authed, setAuthed] = useState(isAuthed());
   const booting = useBoot();
+
+  useEffect(() => {
+    const onStorage = () => setAuthed(isAuthed());
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
 
   if (booting) return <Splash />;
 
@@ -166,11 +173,12 @@ export default function App() {
       <BrowserRouter>
         <Drawer open={open} onClose={() => setOpen(false)} />
         <RoutesWithAnimation />
-        {isAuthed() && <BottomTabs onHamburger={() => setOpen(true)} />}
+        {authed && <BottomTabs onHamburger={() => setOpen(true)} />}
       </BrowserRouter>
     </ThemeProvider>
   );
 }
+
 
 
 
