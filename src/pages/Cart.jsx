@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 export default function Cart() {
   const { items, updateQty, removeItem, clearCart } = useCart();
-
   const subtotal = items.reduce((sum, it) => sum + it.price * it.qty, 0);
 
   return (
@@ -54,20 +53,23 @@ export default function Cart() {
             >
               Clear Cart
             </button>
-            <button
-              style={{
-                background: "#22c55e",
-                color: "#fff",
-                padding: "8px 14px",
-                borderRadius: 8,
-              }}
-            >
-              Proceed to Checkout
-            </button>
+            <Link to="/checkout">
+              <button
+                style={{
+                  background: "#22c55e",
+                  color: "#fff",
+                  padding: "8px 14px",
+                  borderRadius: 8,
+                }}
+              >
+                Proceed to Checkout
+              </button>
+            </Link>
           </div>
         </div>
       )}
     </div>
   );
 }
+
 
